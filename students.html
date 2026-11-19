@@ -1,0 +1,320 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>University of Vert | Manage Students</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+
+<body data-page="students">
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark vert-navbar">
+    <div class="container-fluid px-4">
+
+        <a class="navbar-brand d-flex align-items-center" href="admin-dashboard.html">
+            <div class="vert-logo me-2">
+                <i class="bi bi-mortarboard-fill"></i>
+            </div>
+            <div>
+                <span class="brand-title">UNIVERSITY OF VERT</span>
+                <small class="brand-subtitle d-block">Student Management System</small>
+            </div>
+        </a>
+
+        <button class="navbar-toggler" type="button"
+            data-bs-toggle="collapse" data-bs-target="#vertNavbar"
+            aria-controls="vertNavbar" aria-expanded="false"
+            aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="vertNavbar">
+
+            <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" href="admin-dashboard.html" data-nav="admin-dashboard">
+                        <i class="bi bi-grid me-2"></i>Dashboard
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link active" href="students.html" data-nav="students">
+                        <i class="bi bi-people me-2"></i>Manage Students
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="courses.html" data-nav="courses">
+                        <i class="bi bi-book me-2"></i>Manage Courses
+                    </a>
+                </li>
+            </ul>
+
+            <div class="d-flex align-items-center gap-3">
+                <div class="admin-navbar-profile">
+                    <div class="admin-navbar-avatar" id="sidebarAvatar">A</div>
+                    <div class="d-none d-md-block">
+                        <div class="admin-navbar-name" id="sidebarName">Administrator</div>
+                        <small class="admin-navbar-role">Administrator</small>
+                    </div>
+                </div>
+
+                <button class="btn btn-logout" type="button" onclick="logout()">
+                    <i class="bi bi-box-arrow-right me-1"></i>Logout
+                </button>
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+<!-- MAIN CONTENT -->
+<main class="management-main">
+
+    <!-- PAGE HEADER -->
+    <div class="management-header">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <div class="management-eyebrow">ADMINISTRATION / STUDENTS</div>
+                <h1 class="management-title">Manage Students</h1>
+                <p class="management-description">
+                    Manage student information, academic details and enrolment status.
+                </p>
+            </div>
+
+            <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                <button class="btn btn-management"
+                    onclick="resetStudentForm(); openModal('studentModal');">
+                    <i class="bi bi-plus-lg me-2"></i>Add New Student
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- STATISTICS -->
+    <div class="row g-3 mb-4">
+
+        <div class="col-12 col-sm-6 col-xl-4">
+            <div class="management-stat-card">
+                <div class="management-stat-icon">
+                    <i class="bi bi-people-fill"></i>
+                </div>
+                <div class="management-stat-label">TOTAL STUDENTS</div>
+                <h2 class="management-stat-number" id="studentTotalCount">0</h2>
+            </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-xl-4">
+            <div class="management-stat-card">
+                <div class="management-stat-icon">
+                    <i class="bi bi-person-check-fill"></i>
+                </div>
+                <div class="management-stat-label">ACTIVE STUDENTS</div>
+                <h2 class="management-stat-number" id="studentActiveCount">0</h2>
+            </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-xl-4">
+            <div class="management-stat-card">
+                <div class="management-stat-icon">
+                    <i class="bi bi-person-dash-fill"></i>
+                </div>
+                <div class="management-stat-label">INACTIVE STUDENTS</div>
+                <h2 class="management-stat-number" id="studentInactiveCount">0</h2>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- STUDENT RECORDS -->
+    <section class="management-card">
+
+        <div class="management-card-header">
+            <div class="row align-items-center g-3">
+
+                <div class="col-md-6">
+                    <h5 class="management-card-title">
+                        <i class="bi bi-clock-history me-2"></i>Student Records
+                    </h5>
+                    <p class="management-card-description mb-0">
+                        View and manage all registered students.
+                    </p>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="input-group management-search">
+                        <span class="input-group-text">
+                            <i class="bi bi-search"></i>
+                        </span>
+                        <input type="text" class="form-control"
+                            id="studentSearch"
+                            placeholder="Search student ID, name or email...">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-hover management-table">
+                <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>Student ID</th>
+                        <th>Full Name</th>
+                        <th>Email</th>
+                        <th>Programme</th>
+                        <th>Semester</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody id="studentsTable">
+                    <tr>
+                        <td colspan="8" class="text-center py-4">
+                            Loading student records...
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </section>
+
+    <footer class="admin-footer">
+        © 2026 University of Vert. All Rights Reserved.
+    </footer>
+
+</main>
+
+<!-- ADD / EDIT STUDENT MODAL -->
+<div class="modal fade" id="studentModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header management-modal-header">
+                <h5 class="modal-title fw-bold" id="studentModalTitle">Add New Student</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <form id="studentForm">
+                <div class="modal-body p-4">
+
+                    <input type="hidden" id="editStudentId">
+                    <input type="hidden" id="studentFormId">
+
+                    <div class="row g-3">
+
+                        <div class="col-md-6">
+                            <label class="form-label">Student ID</label>
+                            <input type="text" class="form-control"
+                                id="studentFormStudentId"
+                                placeholder="Enter student ID" required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Full Name</label>
+                            <input type="text" class="form-control"
+                                id="studentFormName"
+                                placeholder="Enter full name" required>
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label">Email Address</label>
+                            <input type="email" class="form-control"
+                                id="studentFormEmail"
+                                placeholder="student@universityofvert.edu" required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Programme</label>
+                            <select class="form-select" id="studentFormProgramme" required>
+                                <option value="">Select Programme</option>
+                                <option value="Library Management">Library Management</option>
+                                <option value="Information Systems Management">Information Systems Management</option>
+                                <option value="Records Management">Records Management</option>
+                                <option value="Information Content Management">Information Content Management</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Semester</label>
+                            <select class="form-select" id="studentFormSemester" required>
+                                <option value="">Select Semester</option>
+                                <option value="Semester 1">Semester 1</option>
+                                <option value="Semester 2">Semester 2</option>
+                                <option value="Semester 3">Semester 3</option>
+                                <option value="Semester 4">Semester 4</option>
+                                <option value="Semester 5">Semester 5</option>
+                                <option value="Semester 6">Semester 6</option>
+                                <option value="Semester 7">Semester 7</option>
+                                <option value="Semester 8">Semester 8</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Status</label>
+                            <select class="form-select" id="studentFormStatus" required>
+                                <option value="Active">Active</option>
+                                <option value="Inactive">Inactive</option>
+                            </select>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-management-outline"
+                        data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-management">
+                        <i class="bi bi-check-lg me-1"></i>Save Student
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<!-- DELETE STUDENT MODAL -->
+<div class="modal fade" id="deleteStudentModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold">Delete Student</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body text-center p-4">
+                <i class="bi bi-exclamation-triangle-fill text-danger" style="font-size:42px;"></i>
+                <h5 class="fw-bold mt-3">Are you sure?</h5>
+                <p class="text-secondary mb-0">
+                    This student record will be permanently deleted.
+                </p>
+            </div>
+
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-management-outline"
+                    data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger"
+                    id="confirmDeleteStudent">Yes, Delete</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="./js/app.js"></script>
+
+</body>
+</html>

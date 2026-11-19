@@ -1,0 +1,403 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>University of Vert | Registration</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+    <link href="./css/style.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --vert-green: #174C38;
+            --vert-dark: #103829;
+            --vert-light: #246B4C;
+            --vert-gold: #D4B878;
+            --vert-bg: #F5F7F3;
+        }
+
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            background: var(--vert-bg);
+            min-height: 100vh;
+        }
+
+        .register-wrapper {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 35px 15px;
+        }
+
+        .register-shell {
+            width: 100%;
+            max-width: 1100px;
+            display: grid;
+            grid-template-columns: 0.85fr 1.15fr;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 45px rgba(16, 56, 41, 0.12);
+        }
+
+        .register-brand {
+            background: linear-gradient(145deg, #174C38, #103829);
+            color: white;
+            padding: 55px 42px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .register-brand::before {
+            content: "";
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border: 1px solid rgba(212, 184, 120, 0.25);
+            border-radius: 50%;
+            top: -100px;
+            right: -120px;
+        }
+
+        .brand-lockup,
+        .brand-message,
+        .brand-footer {
+            position: relative;
+            z-index: 1;
+        }
+
+        .brand-lockup {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            font-size: 21px;
+            font-weight: 800;
+        }
+
+        .brand-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: var(--vert-gold);
+            color: var(--vert-dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+        }
+
+        .eyebrow {
+            color: var(--vert-gold);
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 2px;
+        }
+
+        .brand-message h1 {
+            font-size: 37px;
+            font-weight: 800;
+            line-height: 1.3;
+            margin-top: 18px;
+        }
+
+        .brand-message h1 span {
+            color: var(--vert-gold);
+        }
+
+        .brand-message p {
+            color: rgba(255,255,255,0.75);
+            font-size: 14px;
+            line-height: 1.9;
+            margin-top: 18px;
+        }
+
+        .brand-footer {
+            color: rgba(255,255,255,0.65);
+            font-size: 12px;
+        }
+
+        .register-form-section {
+            padding: 45px 55px;
+        }
+
+        .register-heading h2 {
+            color: var(--vert-dark);
+            font-size: 27px;
+            font-weight: 800;
+        }
+
+        .register-heading p {
+            color: #7A887F;
+            font-size: 13px;
+        }
+
+        .form-label {
+            color: #26352D;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 7px;
+        }
+
+        .form-control,
+        .form-select {
+            background: #F8FAF8;
+            border: 1px solid #DDE6DE;
+            border-radius: 8px;
+            padding: 11px 13px;
+            font-size: 13px;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: var(--vert-green);
+            box-shadow: 0 0 0 3px rgba(23, 76, 56, 0.10);
+            background: white;
+        }
+
+        .btn-vert {
+            background: var(--vert-green);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 13px;
+            font-size: 13px;
+            font-weight: 700;
+            transition: 0.2s;
+        }
+
+        .btn-vert:hover {
+            background: var(--vert-dark);
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        .text-green {
+            color: var(--vert-green);
+            text-decoration: none;
+        }
+
+        .text-green:hover {
+            color: var(--vert-light);
+            text-decoration: underline;
+        }
+
+        #registerAlert {
+            display: none;
+            font-size: 13px;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        #registerAlert.show {
+            display: block;
+        }
+
+        @media (max-width: 850px) {
+            .register-shell {
+                grid-template-columns: 1fr;
+                max-width: 600px;
+            }
+
+            .register-brand {
+                padding: 35px;
+                gap: 40px;
+            }
+
+            .brand-message h1 {
+                font-size: 29px;
+            }
+
+            .register-form-section {
+                padding: 35px 28px;
+            }
+        }
+    </style>
+</head>
+
+<body data-page="register">
+
+<div class="register-wrapper">
+
+    <div class="register-shell">
+
+        <!-- LEFT BRAND PANEL -->
+        <section class="register-brand">
+
+            <div class="brand-lockup">
+                <div class="brand-icon">
+                    <i class="bi bi-mortarboard-fill"></i>
+                </div>
+                <span>University of Vert</span>
+            </div>
+
+            <div class="brand-message">
+                <span class="eyebrow">THIS IS WHERE ACHIEVEMENT BEGINS</span>
+
+                <h1>
+                    Start Your Journey
+                    <span>With Us.</span>
+                </h1>
+
+                <p>
+                    Create your student account and access your
+                    academic information, courses and university
+                    management platform.
+                </p>
+            </div>
+
+            <div class="brand-footer">
+                Learn · Manage · Grow<br>
+                © 2026 University of Vert
+            </div>
+
+        </section>
+
+
+        <!-- RIGHT REGISTRATION FORM -->
+        <section class="register-form-section">
+
+            <div class="register-heading mb-4">
+                <h2>Create an Account</h2>
+                <p>Fill in your student information below.</p>
+            </div>
+
+            <div id="registerAlert" role="alert"></div>
+
+            <form id="registerForm">
+
+                <div class="mb-3">
+                    <label for="regName" class="form-label">Full Name</label>
+                    <input type="text" id="regName" class="form-control"
+                           placeholder="Enter your full name" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="regStudentId" class="form-label">Student ID</label>
+                    <input type="text" id="regStudentId" class="form-control"
+                           placeholder="Enter your student ID" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="regEmail" class="form-label">Email Address</label>
+                    <input type="email" id="regEmail" class="form-control"
+                           placeholder="Enter your email address" required>
+                </div>
+
+                <div class="row">
+
+                    <div class="col-md-8 mb-3">
+                        <label for="regProgramme" class="form-label">Programme</label>
+                        <select id="regProgramme" class="form-select" required>
+                            <option value="">Select Programme</option>
+                            <option value="Information Systems Management">
+                                Information Systems Management
+                            </option>
+                            <option value="Information Management">
+                                Information Management
+                            </option>
+                            <option value="Library Management">
+                                Library Management
+                            </option>
+                            <option value="Records Management">
+                                Records Management
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label for="regSemester" class="form-label">Semester</label>
+                        <select id="regSemester" class="form-select" required>
+                            <option value="">Select</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <div class="mb-3">
+                    <label for="regUsername" class="form-label">Username</label>
+                    <input type="text" id="regUsername" class="form-control"
+                           placeholder="Create a username" minlength="4" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="regPassword" class="form-label">Password</label>
+                    <input type="password" id="regPassword" class="form-control"
+                           placeholder="Create a password" minlength="6" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="confirmPassword" class="form-label">
+                        Confirm Password
+                    </label>
+                    <input type="password" id="confirmPassword" class="form-control"
+                           placeholder="Re-enter your password" minlength="6" required>
+                </div>
+
+                <div class="form-check mb-4">
+                    <input type="checkbox" id="showRegPassword"
+                           class="form-check-input">
+                    <label for="showRegPassword" class="form-check-label small">
+                        Show password
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn-vert w-100">
+                    Create Account
+                    <i class="bi bi-person-plus ms-2"></i>
+                </button>
+
+            </form>
+
+            <p class="text-center mt-4 small text-secondary">
+                Already registered?
+                <a href="./login.html" class="text-green fw-bold">
+                    Sign In
+                </a>
+            </p>
+
+        </section>
+
+    </div>
+
+</div>
+
+<script src="./js/app.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const showPassword = document.getElementById("showRegPassword");
+        const password = document.getElementById("regPassword");
+        const confirmPassword = document.getElementById("confirmPassword");
+
+        showPassword.addEventListener("change", function () {
+            const type = this.checked ? "text" : "password";
+            password.type = type;
+            confirmPassword.type = type;
+        });
+
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,999 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>University of Vert | Admin Dashboard</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="./css/style.css">
+
+    <style>
+        body {
+            background: #F5F7F6;
+            font-family: 'Inter', sans-serif;
+            color: #24332C;
+        }
+
+        /* MAIN CONTENT */
+        .app-main {
+            padding: 35px 4%;
+            max-width: 1600px;
+            margin: auto;
+            min-height: calc(100vh - 160px);
+        }
+
+        /* WELCOME SECTION */
+        .welcome-section {
+            margin-bottom: 30px;
+        }
+
+        .welcome-label {
+            color: #174C38;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+        }
+
+        .welcome-title {
+            color: #103829;
+            font-size: 28px;
+            font-weight: 800;
+            margin: 8px 0;
+        }
+
+        .welcome-description {
+            color: #77847D;
+            font-size: 13px;
+            margin: 0;
+        }
+
+        .date-display {
+            background: #fff;
+            border: 1px solid #E5EAE7;
+            border-radius: 10px;
+            padding: 12px 18px;
+            color: #174C38;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        /* STATISTICS */
+        .dashboard-stat-card {
+            background: #fff;
+            border: 1px solid #E5EAE7;
+            border-radius: 14px;
+            padding: 23px;
+            height: 100%;
+            box-shadow: 0 3px 12px rgba(20,55,40,.035);
+            transition: .25s;
+        }
+
+        .dashboard-stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(20,55,40,.08);
+        }
+
+        .dashboard-stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: #E8F1EC;
+            color: #174C38;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+
+        .dashboard-stat-label {
+            color: #78847E;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: .5px;
+            margin-top: 19px;
+        }
+
+        .dashboard-stat-number {
+            color: #103829;
+            font-size: 30px;
+            font-weight: 800;
+            margin: 5px 0;
+        }
+
+        .dashboard-stat-description {
+            color: #89948D;
+            font-size: 11px;
+        }
+
+        /* DASHBOARD CARDS */
+        .dashboard-card {
+            background: #fff;
+            border: 1px solid #E5EAE7;
+            border-radius: 14px;
+            box-shadow: 0 3px 12px rgba(20,55,40,.035);
+            overflow: hidden;
+            height: 100%;
+        }
+
+        .dashboard-card-header {
+            padding: 21px 24px;
+            border-bottom: 1px solid #E5EAE7;
+        }
+
+        .dashboard-card-header h5 {
+            color: #103829;
+            font-size: 15px;
+            font-weight: 800;
+            margin: 0;
+        }
+
+        .dashboard-card-header p {
+            color: #89948D;
+            font-size: 11px;
+            margin: 5px 0 0;
+        }
+
+        /* CHARTS */
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+
+        .chart-container.small-chart {
+            height: 300px;
+        }
+
+        /* QUICK ACTIONS */
+        .quick-action-card {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: #fff;
+            border: 1px solid #E5EAE7;
+            border-radius: 12px;
+            padding: 18px;
+            text-decoration: none;
+            color: inherit;
+            height: 100%;
+            transition: .25s;
+        }
+
+        .quick-action-card:hover {
+            border-color: #174C38;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 18px rgba(20,55,40,.07);
+        }
+
+        .quick-action-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 11px;
+            background: #E8F1EC;
+            color: #174C38;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .quick-action-title {
+            color: #103829;
+            font-size: 13px;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+
+        .quick-action-description {
+            color: #89948D;
+            font-size: 11px;
+            margin: 0;
+        }
+
+        .quick-action-arrow {
+            margin-left: auto;
+            color: #174C38;
+        }
+
+        /* RECENT STUDENTS */
+        .recent-students-table {
+            margin: 0;
+            font-size: 12px;
+        }
+
+        .recent-students-table thead th {
+            background: #E8F1EC;
+            color: #103829;
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+            padding: 15px;
+            white-space: nowrap;
+        }
+
+        .recent-students-table tbody td {
+            padding: 15px;
+            color: #45534B;
+            border-color: #EDF0EE;
+            vertical-align: middle;
+        }
+
+        .recent-students-table tbody tr:hover {
+            background: #F8FAF9;
+        }
+
+        .student-status {
+            display: inline-block;
+            background: #E8F1EC;
+            color: #174C38;
+            padding: 5px 11px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .student-status.inactive {
+            background: #FCEBEC;
+            color: #A33A43;
+        }
+
+        .view-all-link {
+            color: #174C38;
+            font-size: 11px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .view-all-link:hover {
+            color: #D4B878;
+        }
+
+        /* FOOTER */
+        .admin-footer {
+            border-top: 1px solid #E5EAE7;
+            padding: 20px 4%;
+            color: #89948D;
+            font-size: 11px;
+            text-align: center;
+        }
+
+        @media(max-width: 768px) {
+            .app-main {
+                padding: 25px 16px;
+            }
+
+            .welcome-title {
+                font-size: 23px;
+            }
+
+            .date-display {
+                margin-top: 15px;
+                display: inline-block;
+            }
+
+            .chart-container {
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+
+<body data-page="admin-dashboard">
+
+<!-- =========================================
+     NAVIGATION BAR
+========================================= -->
+
+<nav class="navbar navbar-expand-lg navbar-dark vert-navbar">
+    <div class="container-fluid px-4">
+
+        <a class="navbar-brand d-flex align-items-center" href="admin-dashboard.html">
+            <div class="vert-logo me-2">
+                <i class="bi bi-mortarboard-fill"></i>
+            </div>
+
+            <div>
+                <span class="brand-title">UNIVERSITY OF VERT</span>
+                <small class="brand-subtitle d-block">Student Management System</small>
+            </div>
+        </a>
+
+        <button class="navbar-toggler" type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#vertNavbar"
+            aria-controls="vertNavbar"
+            aria-expanded="false"
+            aria-label="Toggle navigation">
+
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="vertNavbar">
+
+            <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+
+                <li class="nav-item">
+                    <a class="nav-link active" href="admin-dashboard.html" data-nav="admin-dashboard">
+                        <i class="bi bi-grid me-2"></i>Dashboard
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="students.html" data-nav="students">
+                        <i class="bi bi-people me-2"></i>Manage Students
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="courses.html" data-nav="courses">
+                        <i class="bi bi-book me-2"></i>Manage Courses
+                    </a>
+                </li>
+
+            </ul>
+
+            <div class="d-flex align-items-center gap-3">
+
+                <div class="admin-navbar-profile">
+                    <div class="admin-navbar-avatar" id="sidebarAvatar">A</div>
+
+                    <div class="d-none d-md-block">
+                        <div class="admin-navbar-name" id="sidebarName">
+                            Administrator
+                        </div>
+                        <small class="admin-navbar-role">Administrator</small>
+                    </div>
+                </div>
+
+                <button class="btn btn-logout" type="button" onclick="logout()">
+                    <i class="bi bi-box-arrow-right me-1"></i>Logout
+                </button>
+
+            </div>
+        </div>
+    </div>
+</nav>
+
+
+<!-- =========================================
+     MAIN DASHBOARD
+========================================= -->
+
+<main class="app-main">
+
+    <!-- WELCOME SECTION -->
+
+    <section class="welcome-section">
+        <div class="row align-items-center">
+
+            <div class="col-lg-8">
+                <div class="welcome-label">ADMINISTRATOR PORTAL</div>
+
+                <h1 class="welcome-title">
+                    Welcome Back, <span id="welcomeAdminName">Administrator</span>!
+                </h1>
+
+                
+            </div>
+
+            <div class="col-lg-4 text-lg-end">
+                <div class="date-display">
+                    <i class="bi bi-calendar3 me-2"></i>
+                    <span id="dashboardDate"></span>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- =========================================
+         STATISTICS CARDS
+    ========================================= -->
+
+    <section class="mb-4">
+        <div class="row g-4">
+
+            <div class="col-xl-3 col-md-6">
+                <div class="dashboard-stat-card">
+
+                    <div class="dashboard-stat-icon">
+                        <i class="bi bi-people-fill"></i>
+                    </div>
+
+                    <div class="dashboard-stat-label">TOTAL STUDENTS</div>
+                    <div class="dashboard-stat-number" id="totalStudents">0</div>
+                    <div class="dashboard-stat-description">
+                        Registered student records
+                    </div>
+
+                </div>
+            </div>
+
+
+            <div class="col-xl-3 col-md-6">
+                <div class="dashboard-stat-card">
+
+                    <div class="dashboard-stat-icon">
+                        <i class="bi bi-person-check-fill"></i>
+                    </div>
+
+                    <div class="dashboard-stat-label">ACTIVE STUDENTS</div>
+                    <div class="dashboard-stat-number" id="activeStudents">0</div>
+                    <div class="dashboard-stat-description">
+                        Currently active students
+                    </div>
+
+                </div>
+            </div>
+
+
+            <div class="col-xl-3 col-md-6">
+                <div class="dashboard-stat-card">
+
+                    <div class="dashboard-stat-icon">
+                        <i class="bi bi-book-half"></i>
+                    </div>
+
+                    <div class="dashboard-stat-label">TOTAL COURSES</div>
+                    <div class="dashboard-stat-number" id="totalCourses">0</div>
+                    <div class="dashboard-stat-description">
+                        Available academic courses
+                    </div>
+
+                </div>
+            </div>
+
+
+            <div class="col-xl-3 col-md-6">
+                <div class="dashboard-stat-card">
+
+                    <div class="dashboard-stat-icon">
+                        <i class="bi bi-person-x-fill"></i>
+                    </div>
+
+                    <div class="dashboard-stat-label">INACTIVE STUDENTS</div>
+                    <div class="dashboard-stat-number" id="inactiveStudents">0</div>
+                    <div class="dashboard-stat-description">
+                        Currently inactive students
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- =========================================
+         CHARTS
+    ========================================= -->
+
+    <section class="mb-4">
+        <div class="row g-4">
+
+            <!-- STUDENT REGISTRATION CHART -->
+
+            <div class="col-lg-8">
+                <div class="dashboard-card">
+
+                    <div class="dashboard-card-header">
+                        <h5>
+                            <i class="bi bi-bar-chart-line me-2"></i>
+                            Student Registration Overview
+                        </h5>
+
+                        <p>Monthly student registration statistics</p>
+                    </div>
+
+                    <div class="p-4">
+                        <div class="chart-container">
+                            <canvas id="studentRegistrationChart"></canvas>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <!-- STUDENT STATUS CHART -->
+
+            <div class="col-lg-4">
+                <div class="dashboard-card">
+
+                    <div class="dashboard-card-header">
+                        <h5>
+                            <i class="bi bi-pie-chart-fill me-2"></i>
+                            Student Status Distribution
+                        </h5>
+
+                        <p>Overview of student account status</p>
+                    </div>
+
+                    <div class="p-4">
+                        <div class="chart-container small-chart">
+                            <canvas id="studentStatusChart"></canvas>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- =========================================
+         QUICK ACTIONS
+    ========================================= -->
+
+    <section class="mb-4">
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <div>
+                <div class="welcome-label">MANAGEMENT</div>
+                <h5 class="fw-bold mt-1" style="color:#103829;">
+                    Quick Actions
+                </h5>
+            </div>
+        </div>
+
+        <div class="row g-3">
+
+            <div class="col-md-6">
+                <a href="students.html" class="quick-action-card">
+
+                    <div class="quick-action-icon">
+                        <i class="bi bi-person-plus-fill"></i>
+                    </div>
+
+                    <div>
+                        <div class="quick-action-title">Manage Students</div>
+                        <p class="quick-action-description">
+                            Add, edit, search and manage student records.
+                        </p>
+                    </div>
+
+                    <i class="bi bi-arrow-right quick-action-arrow"></i>
+
+                </a>
+            </div>
+
+
+            <div class="col-md-6">
+                <a href="courses.html" class="quick-action-card">
+
+                    <div class="quick-action-icon">
+                        <i class="bi bi-journal-bookmark-fill"></i>
+                    </div>
+
+                    <div>
+                        <div class="quick-action-title">Manage Courses</div>
+                        <p class="quick-action-description">
+                            View, add and update university courses.
+                        </p>
+                    </div>
+
+                    <i class="bi bi-arrow-right quick-action-arrow"></i>
+
+                </a>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- =========================================
+         RECENT STUDENTS
+    ========================================= -->
+
+    <section class="mb-4">
+
+        <div class="dashboard-card">
+
+            <div class="dashboard-card-header d-flex justify-content-between align-items-center">
+
+                <div>
+                    <h5>
+                        <i class="bi bi-clock-history me-2"></i>
+                        Recent Students
+                    </h5>
+
+                    <p>Recently added student records</p>
+                </div>
+
+                <a href="students.html" class="view-all-link">
+                    View All <i class="bi bi-arrow-right ms-1"></i>
+                </a>
+
+            </div>
+
+            <div class="table-responsive">
+
+                <table class="table recent-students-table">
+
+                    <thead>
+                        <tr>
+                            <th>Student ID</th>
+                            <th>Student Name</th>
+                            <th>Email Address</th>
+                            <th>Programme</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="recentStudentsTable">
+
+                        <tr>
+                            <td colspan="5" class="text-center py-4 text-muted">
+                                No student records available.
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- =========================================
+     FOOTER
+========================================= -->
+
+<footer class="admin-footer">
+    © 2026 University of Vert. All Rights Reserved.
+    <br>
+    <span>Student Management System</span>
+</footer>
+
+
+<!-- =========================================
+     JAVASCRIPT
+========================================= -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Main JavaScript -->
+<script src="./js/app.js"></script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    /* =====================================
+       LOCAL STORAGE DATA
+    ===================================== */
+
+    const students = JSON.parse(
+        localStorage.getItem("gc_students") || "[]"
+    );
+
+    const courses = JSON.parse(
+        localStorage.getItem("gc_courses") || "[]"
+    );
+
+    const currentUser = JSON.parse(
+        localStorage.getItem("gc_current_user") || "null"
+    );
+
+
+    /* =====================================
+       ADMIN NAME
+    ===================================== */
+
+    if (currentUser) {
+        const adminName =
+            currentUser.name ||
+            currentUser.fullName ||
+            currentUser.username ||
+            "Administrator";
+
+        document.getElementById("welcomeAdminName").textContent = adminName;
+        document.getElementById("sidebarName").textContent = adminName;
+
+        document.getElementById("sidebarAvatar").textContent =
+            adminName.charAt(0).toUpperCase();
+    }
+
+
+    /* =====================================
+       DATE
+    ===================================== */
+
+    const today = new Date();
+
+    document.getElementById("dashboardDate").textContent =
+        today.toLocaleDateString("en-MY", {
+            day: "numeric",
+            month: "long",
+            year: "numeric"
+        });
+
+
+    /* =====================================
+       STUDENT STATISTICS
+    ===================================== */
+
+    const activeStudents = students.filter(student =>
+        String(student.status || "").toLowerCase() === "active"
+    ).length;
+
+    const inactiveStudents = students.filter(student =>
+        String(student.status || "").toLowerCase() === "inactive"
+    ).length;
+
+    document.getElementById("totalStudents").textContent =
+        students.length;
+
+    document.getElementById("activeStudents").textContent =
+        activeStudents;
+
+    document.getElementById("inactiveStudents").textContent =
+        inactiveStudents;
+
+    document.getElementById("totalCourses").textContent =
+        courses.length;
+
+
+    /* =====================================
+       RECENT STUDENTS TABLE
+    ===================================== */
+
+    const recentTable =
+        document.getElementById("recentStudentsTable");
+
+    const recentStudents = students.slice(-5).reverse();
+
+    if (recentStudents.length > 0) {
+
+        recentTable.innerHTML = recentStudents.map(student => {
+
+            const studentId =
+                student.studentId ||
+                student.studentID ||
+                student.id ||
+                "-";
+
+            const name =
+                student.name ||
+                student.fullName ||
+                "-";
+
+            const email =
+                student.email || "-";
+
+            const programme =
+                student.programme ||
+                student.program ||
+                "-";
+
+            const status =
+                student.status || "Inactive";
+
+            const statusClass =
+                String(status).toLowerCase() === "active"
+                    ? ""
+                    : "inactive";
+
+            return `
+                <tr>
+                    <td class="fw-bold">${escapeHTML(studentId)}</td>
+                    <td>${escapeHTML(name)}</td>
+                    <td>${escapeHTML(email)}</td>
+                    <td>${escapeHTML(programme)}</td>
+                    <td>
+                        <span class="student-status ${statusClass}">
+                            ${escapeHTML(status)}
+                        </span>
+                    </td>
+                </tr>
+            `;
+
+        }).join("");
+
+    } else {
+
+        recentTable.innerHTML = `
+            <tr>
+                <td colspan="5" class="text-center py-4 text-muted">
+                    No student records available.
+                </td>
+            </tr>
+        `;
+    }
+
+
+    /* =====================================
+       SAFE HTML OUTPUT
+    ===================================== */
+
+    function escapeHTML(value) {
+        return String(value).replace(/[&<>"']/g, function (character) {
+            return {
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#039;"
+            }[character];
+        });
+    }
+
+
+    /* =====================================
+       STUDENT REGISTRATION CHART
+    ===================================== */
+
+    const monthLabels = [
+        "Jan", "Feb", "Mar", "Apr",
+        "May", "Jun", "Jul", "Aug",
+        "Sep", "Oct", "Nov", "Dec"
+    ];
+
+    const monthlyCounts = Array(12).fill(0);
+
+    students.forEach(student => {
+
+        const registrationDate =
+            student.createdAt ||
+            student.registrationDate ||
+            student.dateRegistered;
+
+        if (registrationDate) {
+
+            const date = new Date(registrationDate);
+
+            if (!isNaN(date.getTime()) &&
+                date.getFullYear() === today.getFullYear()) {
+
+                monthlyCounts[date.getMonth()]++;
+            }
+        }
+    });
+
+
+    new Chart(
+        document.getElementById("studentRegistrationChart"),
+        {
+            type: "bar",
+
+            data: {
+                labels: monthLabels,
+
+                datasets: [{
+                    label: "New Students",
+                    data: monthlyCounts,
+
+                    backgroundColor: "#174C38",
+                    borderColor: "#103829",
+                    borderWidth: 1,
+
+                    borderRadius: 6,
+                    maxBarThickness: 35
+                }]
+            },
+
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+
+                    tooltip: {
+                        backgroundColor: "#103829",
+                        padding: 12
+                    }
+                },
+
+                scales: {
+                    y: {
+                        beginAtZero: true,
+
+                        ticks: {
+                            precision: 0
+                        },
+
+                        grid: {
+                            color: "#EDF0EE"
+                        }
+                    },
+
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        }
+    );
+
+
+    /* =====================================
+       STUDENT STATUS DOUGHNUT CHART
+    ===================================== */
+
+    new Chart(
+        document.getElementById("studentStatusChart"),
+        {
+            type: "doughnut",
+
+            data: {
+                labels: ["Active", "Inactive"],
+
+                datasets: [{
+                    data: [
+                        activeStudents,
+                        inactiveStudents
+                    ],
+
+                    backgroundColor: [
+                        "#174C38",
+                        "#D4B878"
+                    ],
+
+                    borderWidth: 0,
+                    hoverOffset: 7
+                }]
+            },
+
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+
+                cutout: "70%",
+
+                plugins: {
+                    legend: {
+                        position: "bottom",
+
+                        labels: {
+                            usePointStyle: true,
+                            padding: 20,
+                            font: {
+                                family: "Inter",
+                                size: 11
+                            }
+                        }
+                    },
+
+                    tooltip: {
+                        backgroundColor: "#103829",
+                        padding: 12
+                    }
+                }
+            }
+        }
+    );
+
+});
+</script>
+
+</body>
+</html>
